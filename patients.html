@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GhostBusters Dental Studio - Patients</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="showPatients()">
+
+    <div class="navbar">
+        <a href="index.html" class="logo">GhostBusters Dental Studio</a>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="treatments.html">Treatments</a>
+            <a href="appointment.html">Appointment</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="patients.html">Patients</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Patient Records &amp; Progress</h2>
+        <p id="roleNotice" class="green"></p>
+
+        <div class="box">
+            <input type="text" id="searchBox" onkeyup="searchPatient()" placeholder="Search patient by name...">
+
+            <table id="patientTable">
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Phone</th>
+                    <th>Treatment</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                <tr>
+                    <td>Aarav Sharma</td>
+                    <td>9876543210</td>
+                    <td>Teeth Whitening</td>
+                    <td>2026-11-15</td>
+                    <td>Completed</td>
+                    <td>
+                        <button onclick="updateStatus(this)" class="btn">Update</button>
+                        <button onclick="deleteRow(this)" class="btn-red">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Simran Kaur</td>
+                    <td>9812345678</td>
+                    <td>Root Canal Therapy</td>
+                    <td>2026-11-18</td>
+                    <td>In Progress</td>
+                    <td>
+                        <button onclick="updateStatus(this)" class="btn">Update</button>
+                        <button onclick="deleteRow(this)" class="btn-red">Delete</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">© 2026 GhostBusters Dental Studio</div>
+    <script src="script.js"></script>
+</body>
+</html>

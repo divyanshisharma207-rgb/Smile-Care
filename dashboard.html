@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GhostBusters Dental Studio - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="showDashboard()">
+
+    <div class="navbar">
+        <a href="index.html" class="logo">GhostBusters Dental Studio</a>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="treatments.html">Treatments</a>
+            <a href="appointment.html">Appointment</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="patients.html">Patients</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Practice Management Dashboard</h2>
+        <p id="welcomeMsg" class="green">Active User: Guest (Select role below)</p>
+
+        <div class="row">
+            <div class="card">
+                <p>Total Patients</p>
+                <h1 id="totalPatients" class="green">2</h1>
+            </div>
+            <div class="card">
+                <p>In Progress</p>
+                <h1>1</h1>
+            </div>
+            <div class="card">
+                <p>Completed</p>
+                <h1>1</h1>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="box small-box">
+            <h3>Staff / Patient Access Login</h3>
+            <label>Enter Your Name:</label>
+            <input type="text" id="loginName" placeholder="e.g. Harsheen Kaur">
+
+            <label>Select Role:</label>
+            <select id="loginRole">
+                <option value="Admin">Staff / Admin (Full Access)</option>
+                <option value="Patient">Patient (View Only)</option>
+            </select>
+
+            <button onclick="loginUser()" class="btn" style="width: 100%;">Set Active Role</button>
+        </div>
+    </div>
+
+    <div class="footer">© 2026 GhostBusters Dental Studio | Open Mon - Sat (9 AM - 7 PM)</div>
+    <script src="script.js"></script>
+</body>
+</html>
