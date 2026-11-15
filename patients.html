@@ -1,256 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmileCare | Patient Records</title>
-  <link rel="stylesheet" href="style.css">
+    <title>GhostBusters Dental Studio - Patients</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="showPatients()">
 
-<div class="app">
-  <!-- Sidebar Navigation -->
-  <aside class="sidebar">
-    <div class="brand">
-      <span class="tooth">◉</span>
-      <span class="brand-text">SmileCare<small>Dental Practice Manager</small></span>
-    </div>
-    <a href="dashboard.html" class="nav"><span class="ico">⌂</span><span class="nav-label">Dashboard</span></a>
-    <a href="appointments.html" class="nav"><span class="ico">▦</span><span class="nav-label">Appointments</span></a>
-    <a href="patients.html" class="nav active"><span class="ico">▱</span><span class="nav-label">Patient Records</span></a>
-    <a href="progress.html" class="nav"><span class="ico">▥</span><span class="nav-label">Progress Tracking</span></a>
-    <a href="search.html" class="nav"><span class="ico">⌕</span><span class="nav-label">Search & Filter</span></a>
-    <a href="settings.html" class="nav"><span class="ico">⚙</span><span class="nav-label">Settings</span></a>
-    <a href="profile.html" class="nav" style="margin-top:12px"><span class="ico">♙</span><span class="nav-label">Profile</span></a>
-    <a href="index.html" class="nav" id="logoutBtn"><span class="ico">⇥</span><span class="nav-label">Log Out</span></a>
-    
-    <div class="side-bottom">
-      <div style="font-size:31px;margin-bottom:9px">🦷</div>
-      <b>Healthy Smiles.</b>Happier Lives.
-    </div>
-  </aside>
-
-  <!-- Main Content Area -->
-  <main class="main">
-    <!-- Topbar Header -->
-    <header class="topbar">
-      <div class="global-search">
-        <span>⌕</span>
-        <input id="globalSearch" placeholder="Search patients, records, or appointments...">
-      </div>
-      <div class="top-user">
-        <span style="font-size:20px">♧</span>
-        <div class="avatar" id="topAvatar">JD</div>
-        <div class="user-text">
-          <b id="topName">Dr. Johnson</b>
-          <div id="topRole">Admin</div>
+    <div class="navbar">
+        <a href="index.html" class="logo">GhostBusters Dental Studio</a>
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="treatments.html">Treatments</a>
+            <a href="appointment.html">Appointment</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="patients.html">Patients</a>
         </div>
-      </div>
-    </header>
-
-    <!-- Page Content -->
-    <div class="content">
-      <div class="page-title">
-        <h1>Patient Records</h1>
-        <button id="addPatientBtn">＋ Add patient</button>
-      </div>
-
-      <!-- Filters Row -->
-      <div class="filters">
-        <input id="patientSearch" placeholder="Search name, ID, email or phone...">
-        <select id="patientStatus">
-          <option value="">All statuses</option>
-          <option>Active</option>
-          <option>Follow-up</option>
-          <option>Inactive</option>
-        </select>
-      </div>
-
-      <!-- Patient Table Panel -->
-      <div class="panel">
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Patient</th>
-                <th>Patient ID</th>
-                <th>Contact</th>
-                <th>Last Visit</th>
-                <th>Next Follow-up</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="patientRows"></tbody>
-          </table>
-        </div>
-      </div>
     </div>
-  </main>
-</div>
 
-<!-- Modal Dialog -->
-<div id="modalBackdrop" class="modal-backdrop">
-  <div class="modal">
-    <div class="modal-head">
-      <h2 id="modalTitle">Patient details</h2>
-      <button class="close" id="modalClose">✕</button>
+    <div class="container">
+        <h2>Patient Records &amp; Progress</h2>
+        <p id="roleNotice" class="green"></p>
+
+        <div class="box">
+            <input type="text" id="searchBox" onkeyup="searchPatient()" placeholder="Search patient by name...">
+
+            <table id="patientTable">
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Phone</th>
+                    <th>Treatment</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                <tr>
+                    <td>Aarav Sharma</td>
+                    <td>9876543210</td>
+                    <td>Teeth Whitening</td>
+                    <td>2026-11-15</td>
+                    <td>Completed</td>
+                    <td>
+                        <button onclick="updateStatus(this)" class="btn">Update</button>
+                        <button onclick="deleteRow(this)" class="btn-red">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Simran Kaur</td>
+                    <td>9812345678</td>
+                    <td>Root Canal Therapy</td>
+                    <td>2026-11-18</td>
+                    <td>In Progress</td>
+                    <td>
+                        <button onclick="updateStatus(this)" class="btn">Update</button>
+                        <button onclick="deleteRow(this)" class="btn-red">Delete</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-    <div id="modalBody"></div>
-  </div>
-</div>
 
-<!-- Toast -->
-<div id="toast" class="toast"></div>
-
-<!-- Scripts -->
-<script src="script.js"></script>
-<script>
-  // 1. Render Patients Table
-  function renderPatients() {
-    const q = (document.getElementById("patientSearch")?.value || "").toLowerCase();
-    const st = document.getElementById("patientStatus")?.value || "";
-
-    const patients = getPatients();
-    const filtered = patients.filter(p => {
-      const matchText = (p.name + " " + p.id + " " + p.email + " " + p.phone).toLowerCase().includes(q);
-      const matchStatus = !st || p.status === st;
-      return matchText && matchStatus;
-    });
-
-    const tbody = document.getElementById("patientRows");
-    if (!filtered.length) {
-      tbody.innerHTML = `<tr><td colspan="7" class="empty">No patient records found.</td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = filtered.map(p => `
-      <tr>
-        <td><b>${escapeHtml(p.name)}</b></td>
-        <td>${p.id}</td>
-        <td>${escapeHtml(p.phone)}<br><small style="color:var(--muted)">${escapeHtml(p.email)}</small></td>
-        <td>${formatDate(p.lastVisit)}</td>
-        <td>${formatDate(p.followup)}</td>
-        <td><span class="status ${getStatusClass(p.status)}">${escapeHtml(p.status)}</span></td>
-        <td>
-          <button class="view" onclick="viewPatient('${p.id}')">View</button>
-          <button class="view" onclick="editPatient('${p.id}')">Edit</button>
-        </td>
-      </tr>
-    `).join("");
-  }
-
-  // 2. View Patient Modal
-  function viewPatient(id) {
-    const p = getPatientById(id);
-    if (!p) return;
-
-    openModal("Patient record · " + p.id, `
-      <p><b>Name:</b> ${escapeHtml(p.name)}</p>
-      <p><b>Email:</b> ${escapeHtml(p.email)}</p>
-      <p><b>Phone:</b> ${escapeHtml(p.phone)}</p>
-      <p><b>Last visit:</b> ${formatDate(p.lastVisit)}</p>
-      <p><b>Next follow-up:</b> ${formatDate(p.followup)}</p>
-      <p><b>Status:</b> ${escapeHtml(p.status)}</p>
-      <p><b>Notes:</b><br>${escapeHtml(p.notes || "No notes added.")}</p>
-      <div class="form-actions">
-        <button type="button" onclick="editPatient('${p.id}')">Edit record</button>
-        <button type="button" class="secondary" onclick="closeModal()">Close</button>
-      </div>
-    `);
-  }
-
-  // 3. Add or Edit Patient Modal
-  function openPatientModal(editId = null) {
-    const currentUser = getCurrentUser();
-    if (currentUser.role !== "Admin") {
-      showToast("Only administrators can manage patient records in this demo.");
-      return;
-    }
-
-    const p = editId ? getPatientById(editId) : null;
-    const statuses = ["Active", "Follow-up", "Inactive"];
-
-    openModal(p ? "Edit patient record" : "Add new patient", `
-      <form id="patientForm">
-        <div class="form-grid">
-          <div class="field">
-            <label>Full name *</label>
-            <input name="name" value="${escapeHtml(p ? p.name : "")}" required maxlength="80">
-          </div>
-          <div class="field">
-            <label>Email *</label>
-            <input name="email" type="email" value="${escapeHtml(p ? p.email : "")}" required>
-          </div>
-          <div class="field">
-            <label>Phone *</label>
-            <input name="phone" value="${escapeHtml(p ? p.phone : "")}" type="tel" pattern="[0-9+() -]{7,20}" required>
-          </div>
-          <div class="field">
-            <label>Last visit</label>
-            <input name="lastVisit" type="date" value="${p?.lastVisit || ""}">
-          </div>
-          <div class="field">
-            <label>Next follow-up</label>
-            <input name="followup" type="date" value="${p?.followup || ""}">
-          </div>
-          <div class="field">
-            <label>Status</label>
-            <select name="status">
-              ${statuses.map(s => `<option ${(p ? p.status : "Active") === s ? "selected" : ""}>${s}</option>`).join("")}
-            </select>
-          </div>
-          <div class="field full">
-            <label>Clinical / admin note</label>
-            <textarea name="notes" maxlength="1000">${escapeHtml(p?.notes || "")}</textarea>
-          </div>
-        </div>
-        <div class="form-actions">
-          <button type="submit">Save patient</button>
-          <button type="button" class="secondary" onclick="closeModal()">Cancel</button>
-        </div>
-      </form>
-    `, function(formData) {
-      const updated = {
-        name: formData.get("name").trim(),
-        email: formData.get("email").trim(),
-        phone: formData.get("phone").trim(),
-        lastVisit: formData.get("lastVisit"),
-        followup: formData.get("followup"),
-        status: formData.get("status"),
-        notes: formData.get("notes").trim()
-      };
-
-      const list = getPatients();
-      if (p) {
-        const item = list.find(x => x.id === editId);
-        if (item) Object.assign(item, updated);
-        logActivity("Patient record updated for " + updated.name);
-      } else {
-        const newId = "P-" + String(list.length + 10).padStart(3, "0");
-        list.push({ id: newId, ...updated });
-        logActivity("Patient record created for " + updated.name);
-      }
-
-      savePatients(list);
-      closeModal();
-      renderPatients();
-      showToast(p ? "Patient updated." : "Patient record saved.");
-    });
-  }
-
-  function editPatient(id) {
-    openPatientModal(id);
-  }
-
-  // Setup listeners
-  document.addEventListener("DOMContentLoaded", function() {
-    renderPatients();
-
-    document.getElementById("addPatientBtn").onclick = () => openPatientModal();
-    document.getElementById("patientSearch").addEventListener("input", renderPatients);
-    document.getElementById("patientStatus").addEventListener("change", renderPatients);
-  });
-</script>
+    <div class="footer">© 2026 GhostBusters Dental Studio</div>
+    <script src="script.js"></script>
 </body>
 </html>
