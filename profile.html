@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmileCare | Profile Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="tooth">◉</span>
+      <span class="brand-text">SmileCare<small>Dental Practice Manager</small></span>
+    </div>
+    <a href="dashboard.html" class="nav"><span class="ico">⌂</span><span class="nav-label">Dashboard</span></a>
+    <a href="appointments.html" class="nav"><span class="ico">▦</span><span class="nav-label">Appointments</span></a>
+    <a href="patients.html" class="nav"><span class="ico">▱</span><span class="nav-label">Patient Records</span></a>
+    <a href="progress.html" class="nav"><span class="ico">▥</span><span class="nav-label">Progress Tracking</span></a>
+    <a href="search.html" class="nav"><span class="ico">⌕</span><span class="nav-label">Search & Filter</span></a>
+    <a href="settings.html" class="nav"><span class="ico">⚙</span><span class="nav-label">Settings</span></a>
+    <a href="profile.html" class="nav active" style="margin-top:12px"><span class="ico">♙</span><span class="nav-label">Profile</span></a>
+    <a href="index.html" class="nav" id="logoutBtn"><span class="ico">⇥</span><span class="nav-label">Log Out</span></a>
+    
+    <div class="side-bottom">
+      <div style="font-size:31px;margin-bottom:9px">🦷</div>
+      <b>Healthy Smiles.</b>Happier Lives.
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main">
+    <!-- Topbar Header -->
+    <header class="topbar">
+      <div class="global-search">
+        <span>⌕</span>
+        <input id="globalSearch" placeholder="Search patients, records, or appointments...">
+      </div>
+      <div class="top-user">
+        <span style="font-size:20px">♧</span>
+        <div class="avatar" id="topAvatar">JD</div>
+        <div class="user-text">
+          <b id="topName">Dr. Johnson</b>
+          <div id="topRole">Admin</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="content">
+      <div class="page-title">
+        <h1>Profile Management</h1>
+      </div>
+
+      <!-- Profile Form Card -->
+      <div class="form-card">
+        <form id="profileForm">
+          <div class="form-grid">
+            <div class="field">
+              <label>Full name</label>
+              <input id="profileFullName" required maxlength="80">
+            </div>
+
+            <div class="field">
+              <label>Email</label>
+              <input id="profileEmail" type="email" required>
+            </div>
+
+            <div class="field">
+              <label>Role</label>
+              <input id="profileRoleInput" disabled>
+            </div>
+
+            <div class="field">
+              <label>Clinic / department</label>
+              <input id="profileClinic" value="SmileCare Dental Clinic" maxlength="100">
+            </div>
+
+            <div class="field full">
+              <label>Short profile description</label>
+              <textarea id="profileBio" placeholder="Add a short professional description..." maxlength="300"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit">Save profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Scripts -->
+<script src="script.js"></script>
+<script>
+  // Populate form with current user details
+  function loadProfile() {
+    const user = getCurrentUser();
+    document.getElementById("profileFullName").value = user.name || "";
+    document.getElementById("profileEmail").value = user.email || "";
+    document.getElementById("profileRoleInput").value = user.role || "Admin";
+    document.getElementById("profileClinic").value = user.clinic || "SmileCare Dental Clinic";
+    document.getElementById("profileBio").value = user.bio || "";
+  }
+
+  // Handle Profile Save
+  document.getElementById("profileForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    if (!this.reportValidity()) return;
+
+    const user = getCurrentUser();
+    user.name = document.getElementById("profileFullName").value.trim();
+    user.email = document.getElementById("profileEmail").value.trim();
+    user.clinic = document.getElementById("profileClinic").value.trim();
+    user.bio = document.getElementById("profileBio").value.trim();
+
+    saveCurrentUser(user);
+
+    // Update topbar header directly
+    const initials = user.name.split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase();
+    document.getElementById("topAvatar").textContent = initials || "JD";
+    document.getElementById("topName").textContent = user.name;
+    document.getElementById("topRole").textContent = user.role;
+
+    logActivity("Practitioner profile updated by " + user.name);
+    showToast("Profile saved.");
+  });
+
+  document.addEventListener("DOMContentLoaded", loadProfile);
+</script>
+</body>
+</html>

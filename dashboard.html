@@ -1,59 +1,556 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>GhostBusters Dental Studio - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmileCare | Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body onload="showDashboard()">
+<body>
 
-    <div class="navbar">
-        <a href="index.html" class="logo">GhostBusters Dental Studio</a>
-        <div class="menu">
-            <a href="index.html">Home</a>
-            <a href="treatments.html">Treatments</a>
-            <a href="appointment.html">Appointment</a>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="patients.html">Patients</a>
-        </div>
+<div class="app">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="tooth">◉</span>
+      <span class="brand-text">SmileCare<small>Dental Practice Manager</small></span>
     </div>
+    <a href="dashboard.html" class="nav active"><span class="ico">⌂</span><span class="nav-label">Dashboard</span></a>
+    <a href="appointments.html" class="nav"><span class="ico">▦</span><span class="nav-label">Appointments</span></a>
+    <a href="patients.html" class="nav"><span class="ico">▱</span><span class="nav-label">Patient Records</span></a>
+    <a href="progress.html" class="nav"><span class="ico">▥</span><span class="nav-label">Progress Tracking</span></a>
+    <a href="search.html" class="nav"><span class="ico">⌕</span><span class="nav-label">Search & Filter</span></a>
+    <a href="settings.html" class="nav"><span class="ico">⚙</span><span class="nav-label">Settings</span></a>
+    <a href="profile.html" class="nav" style="margin-top:12px"><span class="ico">♙</span><span class="nav-label">Profile</span></a>
+    <a href="index.html" class="nav" id="logoutBtn"><span class="ico">⇥</span><span class="nav-label">Log Out</span></a>
+    
+    <div class="side-bottom">
+      <div style="font-size:31px;margin-bottom:9px">🦷</div>
+      <b>Healthy Smiles.</b>Happier Lives.
+    </div>
+  </aside>
 
-    <div class="container">
-        <h2>Practice Management Dashboard</h2>
-        <p id="welcomeMsg" class="green">Active User: Guest (Select role below)</p>
+  <!-- Main Content Area -->
+  <main class="main">
+    <!-- Topbar Header -->
+    <header class="topbar">
+      <div class="global-search">
+        <span>⌕</span>
+        <input id="globalSearch" placeholder="Search patients, records, or appointments...">
+      </div>
+      <div class="top-user">
+        <span style="font-size:20px">♧</span>
+        <div class="avatar" id="topAvatar">JD</div>
+        <div class="user-text">
+          <b id="topName">Dr. Johnson</b>
+          <div id="topRole">Admin</div>
+        </div>
+      </div>
+    </header>
 
-        <div class="row">
-            <div class="card">
-                <p>Total Patients</p>
-                <h1 id="totalPatients" class="green">2</h1>
-            </div>
-            <div class="card">
-                <p>In Progress</p>
-                <h1>1</h1>
-            </div>
-            <div class="card">
-                <p>Completed</p>
-                <h1>1</h1>
-            </div>
+    <!-- Page Content -->
+    <div class="content">
+      <!-- Welcome Header -->
+      <div class="welcome">
+        <div>
+          <h1 id="welcomeTitle">Welcome back, Dr. Johnson!</h1>
+          <p>Manage appointments, patient records and track progress — all in one place.</p>
+        </div>
+        <div class="datepill">▦ &nbsp; <span id="todayDate"></span></div>
+      </div>
+
+      <!-- Quick Statistics Cards -->
+      <div class="stats">
+        <div class="stat blue">
+          <span class="symbol">▦</span>
+          <strong id="statAppointments">0</strong>
+          <small>Upcoming Appointments</small>
+          <a href="appointments.html">View all →</a>
+        </div>
+        <div class="stat green">
+          <span class="symbol">♟</span>
+          <strong id="statPatients">0</strong>
+          <small>Total Patients</small>
+          <a href="patients.html">View all →</a>
+        </div>
+        <div class="stat purple">
+          <span class="symbol">✓</span>
+          <strong id="statProgress">0%</strong>
+          <small>Treatment Progress</small>
+          <a href="progress.html">View progress →</a>
+        </div>
+        <div class="stat orange">
+          <span class="symbol">▣</span>
+          <strong id="statFollowups">0</strong>
+          <small>Pending Follow-ups</small>
+          <a href="appointments.html">View all →</a>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Upcoming Appointments Panel -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>▦ &nbsp; Upcoming Appointments</h2>
+            <a href="appointments.html" class="link">View all →</a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Patient</th>
+                  <th>Treatment</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="upcomingRows"></tbody>
+            </table>
+          </div>
         </div>
 
-        <br>
+        <!-- Interactive Calendar Panel -->
+        <div class="panel calendar">
+          <div class="cal-head">
+            <h2 style="font-size:17px;margin:0">▦ &nbsp; Calendar</h2>
+            <div>
+              <button id="prevMonth">‹</button>
+              <b id="calMonth">Oct 2026</b>
+              <button id="nextMonth">›</button>
+            </div>
+          </div>
+          <div class="cal-grid" id="calendarGrid"></div>
+        </div>
 
-        <div class="box small-box">
-            <h3>Staff / Patient Access Login</h3>
-            <label>Enter Your Name:</label>
-            <input type="text" id="loginName" placeholder="e.g. Harsheen Kaur">
+        <!-- Quick Actions & Mini Profile -->
+        <div class="quick-column">
+          <div class="panel quick">
+            <h2>ϟ &nbsp; Quick Actions</h2>
+            <div class="quick-actions">
+              <button id="quickAddPatient">♙ &nbsp; Add New Patient</button>
+              <button class="secondary" id="quickSchedule">▦ &nbsp; Schedule Appointment</button>
+              <button class="secondary" id="quickRecord">✎ &nbsp; Update Record</button>
+              <a href="progress.html" class="btn secondary">▥ &nbsp; View Progress</a>
+            </div>
+          </div>
 
-            <label>Select Role:</label>
-            <select id="loginRole">
-                <option value="Admin">Staff / Admin (Full Access)</option>
-                <option value="Patient">Patient (View Only)</option>
+          <div class="panel profile-mini">
+            <b>♙ &nbsp; Your Profile</b>
+            <div class="avatar" id="profileAvatar">JD</div>
+            <b id="profileName">Dr. Johnson</b>
+            <p id="profileRole" style="color:var(--muted);font-size:13px">Administrator</p>
+            <a href="profile.html" class="btn secondary" style="margin-top:12px;width:100%">Edit Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Grid: Patient Records & Activity -->
+      <div class="bottom-grid">
+        <!-- Patient Records Snapshot -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>▱ &nbsp; Patient Records</h2>
+            <input class="searchbox" id="dashboardPatientSearch" placeholder="Search patients...">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Patient ID</th>
+                  <th>Last Visit</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="dashboardPatientRows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Activity Feed -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>ϟ &nbsp; Recent Activity</h2>
+            <a href="progress.html" class="link">View all →</a>
+          </div>
+          <div class="activity" id="activityList"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Reusable Modal Dialog -->
+<div id="modalBackdrop" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="modalTitle">Details</h2>
+      <button class="close" id="modalClose">✕</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast" class="toast"></div>
+
+<!-- Scripts -->
+<script src="script.js"></script>
+<script>
+  let calDate = new Date();
+
+  // 1. Render Overview Numbers & Stats
+  function renderStats() {
+    const appointments = getAppointments();
+    const patients = getPatients();
+    const progress = getProgress();
+
+    // Upcoming appointments count (Confirmed or Pending)
+    const upcomingCount = appointments.filter(a => a.status === "Confirmed" || a.status === "Pending").length;
+    document.getElementById("statAppointments").textContent = upcomingCount;
+
+    // Total Patients
+    document.getElementById("statPatients").textContent = patients.length;
+
+    // Pending Followups
+    const followupsCount = patients.filter(p => p.status === "Follow-up").length +
+                           progress.filter(p => p.status === "Needs follow-up").length;
+    document.getElementById("statFollowups").textContent = followupsCount;
+
+    // Treatment Progress %
+    const completedCount = progress.filter(p => p.status === "Completed").length;
+    const progressPct = progress.length ? Math.round((completedCount / progress.length) * 100) : 0;
+    document.getElementById("statProgress").textContent = progressPct + "%";
+  }
+
+  // 2. Render Upcoming Appointments Table
+  function renderUpcoming() {
+    const appointments = getAppointments();
+    const active = appointments.filter(a => a.status !== "Cancelled")
+      .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))
+      .slice(0, 5);
+
+    const tbody = document.getElementById("upcomingRows");
+    if (!active.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="empty">No appointments scheduled.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = active.map(a => `
+      <tr>
+        <td>${formatTime(a.time)}</td>
+        <td>${escapeHtml(getPatientName(a.patientId))}</td>
+        <td>${escapeHtml(a.treatment)}</td>
+        <td><span class="status ${getStatusClass(a.status)}">${escapeHtml(a.status)}</span></td>
+        <td><button class="view" onclick="viewAppointmentDetails(${a.id})">View</button></td>
+      </tr>
+    `).join("");
+  }
+
+  // 3. Render Dashboard Patients Table with Search
+  function renderDashboardPatients() {
+    const search = (document.getElementById("dashboardPatientSearch").value || "").toLowerCase();
+    const patients = getPatients();
+    const filtered = patients.filter(p => (p.name + " " + p.id).toLowerCase().includes(search)).slice(0, 4);
+
+    const tbody = document.getElementById("dashboardPatientRows");
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="empty">No matching patients.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(p => `
+      <tr>
+        <td><b>${escapeHtml(p.name)}</b></td>
+        <td>${p.id}</td>
+        <td>${formatDate(p.lastVisit)}</td>
+        <td><span class="status ${getStatusClass(p.status)}">${escapeHtml(p.status)}</span></td>
+        <td><button class="view" onclick="viewPatientDetails('${p.id}')">View</button></td>
+      </tr>
+    `).join("");
+  }
+
+  // 4. Render Calendar
+  function renderCalendar() {
+    const y = calDate.getFullYear();
+    const m = calDate.getMonth();
+    const firstDay = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const today = new Date();
+    const appointments = getAppointments();
+
+    document.getElementById("calMonth").textContent = calDate.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    let html = dayNames.map(n => `<span class="dayname">${n}</span>`).join("");
+
+    for (let i = 0; i < firstDay; i++) {
+      html += `<span></span>`;
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const isToday = d === today.getDate() && m === today.getMonth() && y === today.getFullYear();
+      const dateStr = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      const hasAppt = appointments.some(a => a.date === dateStr && a.status !== "Cancelled");
+
+      const underlineStyle = hasAppt && !isToday ? "text-decoration:underline;text-decoration-color:#2167d5" : "";
+      html += `<span class="${isToday ? 'today' : ''}" style="${underlineStyle}" title="${hasAppt ? 'Has appointment' : ''}">${d}</span>`;
+    }
+
+    document.getElementById("calendarGrid").innerHTML = html;
+  }
+
+  // 5. Render Recent Activities
+  function renderActivityFeed() {
+    const activities = getActivities();
+    const container = document.getElementById("activityList");
+    if (!activities.length) {
+      container.innerHTML = `<div class="empty">No recent activity.</div>`;
+      return;
+    }
+
+    container.innerHTML = activities.slice(0, 5).map(a => `
+      <div class="activity-item">
+        ${escapeHtml(a.title)}
+        <small>${escapeHtml(a.time)}</small>
+      </div>
+    `).join("");
+  }
+
+  // 6. View Details Handlers (Modals)
+  function viewAppointmentDetails(id) {
+    const a = getAppointments().find(x => x.id === id);
+    if (!a) return;
+    openModal("Appointment details", `
+      <p><b>Patient:</b> ${escapeHtml(getPatientName(a.patientId))}</p>
+      <p><b>Date:</b> ${formatDate(a.date)} at ${formatTime(a.time)}</p>
+      <p><b>Treatment:</b> ${escapeHtml(a.treatment)}</p>
+      <p><b>Provider:</b> ${escapeHtml(a.provider)}</p>
+      <p><b>Status:</b> ${escapeHtml(a.status)}</p>
+      <div class="form-actions">
+        <a href="appointments.html" class="btn">Go to Appointments</a>
+        <button type="button" class="secondary" onclick="closeModal()">Close</button>
+      </div>
+    `);
+  }
+
+  function viewPatientDetails(id) {
+    const p = getPatientById(id);
+    if (!p) return;
+    openModal("Patient record · " + p.id, `
+      <p><b>Name:</b> ${escapeHtml(p.name)}</p>
+      <p><b>Email:</b> ${escapeHtml(p.email)}</p>
+      <p><b>Phone:</b> ${escapeHtml(p.phone)}</p>
+      <p><b>Last visit:</b> ${formatDate(p.lastVisit)}</p>
+      <p><b>Next follow-up:</b> ${formatDate(p.followup)}</p>
+      <p><b>Status:</b> ${escapeHtml(p.status)}</p>
+      <p><b>Notes:</b><br>${escapeHtml(p.notes || "No notes added.")}</p>
+      <div class="form-actions">
+        <a href="patients.html" class="btn">Go to Patient Records</a>
+        <button type="button" class="secondary" onclick="closeModal()">Close</button>
+      </div>
+    `);
+  }
+
+  // 7. Quick Action Modals
+  function handleQuickAddPatient() {
+    const user = getCurrentUser();
+    if (user.role !== "Admin") {
+      showToast("Only administrators can add patient records.");
+      return;
+    }
+    openModal("Add new patient", `
+      <form id="modalPatientForm">
+        <div class="form-grid">
+          <div class="field"><label>Full name *</label><input name="name" required maxlength="80"></div>
+          <div class="field"><label>Email *</label><input name="email" type="email" required></div>
+          <div class="field"><label>Phone *</label><input name="phone" type="tel" pattern="[0-9+() -]{7,20}" required></div>
+          <div class="field"><label>Last visit</label><input name="lastVisit" type="date"></div>
+          <div class="field"><label>Next follow-up</label><input name="followup" type="date"></div>
+          <div class="field">
+            <label>Status</label>
+            <select name="status">
+              <option>Active</option>
+              <option>Follow-up</option>
+              <option>Inactive</option>
             </select>
-
-            <button onclick="loginUser()" class="btn" style="width: 100%;">Set Active Role</button>
+          </div>
+          <div class="field full"><label>Clinical / admin note</label><textarea name="notes" maxlength="1000"></textarea></div>
         </div>
-    </div>
+        <div class="form-actions">
+          <button type="submit">Save patient</button>
+          <button type="button" class="secondary" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    `, function(formData) {
+      const patients = getPatients();
+      const newId = "P-" + String(patients.length + 10).padStart(3, "0");
+      const newPatient = {
+        id: newId,
+        name: formData.get("name").trim(),
+        email: formData.get("email").trim(),
+        phone: formData.get("phone").trim(),
+        lastVisit: formData.get("lastVisit"),
+        followup: formData.get("followup"),
+        status: formData.get("status"),
+        notes: formData.get("notes").trim()
+      };
+      patients.push(newPatient);
+      savePatients(patients);
+      logActivity("Patient record created for " + newPatient.name);
+      closeModal();
+      refreshDashboard();
+      showToast("Patient record saved.");
+    });
+  }
 
-    <div class="footer">© 2026 GhostBusters Dental Studio | Open Mon - Sat (9 AM - 7 PM)</div>
-    <script src="script.js"></script>
+  function handleQuickSchedule() {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    openModal("Schedule appointment", `
+      <form id="modalApptForm">
+        <div class="form-grid">
+          <div class="field full">
+            <label>Patient *</label>
+            <select name="patientId" required>${getPatientOptions()}</select>
+          </div>
+          <div class="field"><label>Date *</label><input name="date" type="date" value="${todayStr}" required></div>
+          <div class="field"><label>Time *</label><input name="time" type="time" value="09:00" required></div>
+          <div class="field">
+            <label>Treatment *</label>
+            <select name="treatment" required>
+              <option>Cleaning</option>
+              <option>Check-up</option>
+              <option>Root Canal</option>
+              <option>Filling</option>
+              <option>Braces Consultation</option>
+              <option>Extraction</option>
+              <option>Whitening</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field"><label>Provider *</label><input name="provider" value="Dr. Johnson" required maxlength="80"></div>
+          <div class="field">
+            <label>Status</label>
+            <select name="status">
+              <option>Confirmed</option>
+              <option>Pending</option>
+              <option>Completed</option>
+              <option>Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Save appointment</button>
+          <button type="button" class="secondary" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    `, function(formData) {
+      const appointments = getAppointments();
+      const newAppt = {
+        id: Date.now(),
+        patientId: formData.get("patientId"),
+        date: formData.get("date"),
+        time: formData.get("time"),
+        treatment: formData.get("treatment"),
+        provider: formData.get("provider").trim(),
+        status: formData.get("status")
+      };
+      appointments.push(newAppt);
+      saveAppointments(appointments);
+      logActivity("Appointment scheduled for " + getPatientName(newAppt.patientId));
+      closeModal();
+      refreshDashboard();
+      showToast("Appointment saved.");
+    });
+  }
+
+  function handleQuickRecord() {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const user = getCurrentUser();
+    openModal("Add progress note", `
+      <form id="modalProgForm">
+        <div class="form-grid">
+          <div class="field full">
+            <label>Patient *</label>
+            <select name="patientId" required>${getPatientOptions()}</select>
+          </div>
+          <div class="field"><label>Date *</label><input name="date" type="date" value="${todayStr}" required></div>
+          <div class="field"><label>Treatment / activity *</label><input name="treatment" required maxlength="120"></div>
+          <div class="field">
+            <label>Progress status</label>
+            <select name="status">
+              <option>In progress</option>
+              <option>Completed</option>
+              <option>Needs follow-up</option>
+            </select>
+          </div>
+          <div class="field"><label>Next step / follow-up</label><input name="next" maxlength="180"></div>
+          <div class="field"><label>Updated by</label><input name="by" value="${escapeHtml(user.name)}" required maxlength="80"></div>
+          <div class="field full"><label>Progress note *</label><textarea name="note" required maxlength="1500"></textarea></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Save progress</button>
+          <button type="button" class="secondary" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    `, function(formData) {
+      const progress = getProgress();
+      const newProg = {
+        id: Date.now(),
+        patientId: formData.get("patientId"),
+        date: formData.get("date"),
+        treatment: formData.get("treatment").trim(),
+        status: formData.get("status"),
+        next: formData.get("next").trim(),
+        by: formData.get("by").trim(),
+        note: formData.get("note").trim()
+      };
+      progress.push(newProg);
+      saveProgress(progress);
+      logActivity("Progress updated for " + getPatientName(newProg.patientId));
+      closeModal();
+      refreshDashboard();
+      showToast("Progress record saved.");
+    });
+  }
+
+  // 8. Refresh everything on dashboard
+  function refreshDashboard() {
+    const user = getCurrentUser();
+    document.getElementById("welcomeTitle").textContent = "Welcome back, " + user.name + "!";
+    document.getElementById("profileName").textContent = user.name;
+    document.getElementById("profileRole").textContent = user.role === "Admin" ? "Administrator" : "Staff member";
+    const initials = user.name.split(/\s+/).map(w => w[0]).join("").slice(0, 2).toUpperCase();
+    document.getElementById("profileAvatar").textContent = initials || "JD";
+
+    renderStats();
+    renderUpcoming();
+    renderDashboardPatients();
+    renderActivityFeed();
+    renderCalendar();
+  }
+
+  // Initialize Page Listeners
+  document.addEventListener("DOMContentLoaded", function() {
+    refreshDashboard();
+
+    document.getElementById("prevMonth").onclick = () => {
+      calDate = new Date(calDate.getFullYear(), calDate.getMonth() - 1, 1);
+      renderCalendar();
+    };
+    document.getElementById("nextMonth").onclick = () => {
+      calDate = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 1);
+      renderCalendar();
+    };
+
+    document.getElementById("dashboardPatientSearch").addEventListener("input", renderDashboardPatients);
+    document.getElementById("quickAddPatient").onclick = handleQuickAddPatient;
+    document.getElementById("quickSchedule").onclick = handleQuickSchedule;
+    document.getElementById("quickRecord").onclick = handleQuickRecord;
+  });
+</script>
 </body>
 </html>
