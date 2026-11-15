@@ -1,25 +1,47 @@
-# SmileCare — Dental Practice Management Website
+# SmileCare — Dental Practice Manager
 
-A responsive front-end prototype for organizing dental clinic patient records, appointments, treatment progress, follow-ups, and staff profile information.
+A clean, modern, multi-page web application for dental practice management, designed for **CSE 326 Web Technology Course Project**.
 
-## Run locally
-1. Download and extract `SmileCare_Dental_Practice.zip`.
-2. Open `index.html` in a modern browser (Chrome, Edge, Firefox).
-3. Use the demo sign-in shown on the page:
-   - Admin: `admin@smilecare.demo` / `SmileCare123!`
-   - Staff: `staff@smilecare.demo` / `SmileCare123!`
-4. The role dropdown is a demo role switcher. The prototype does not verify these passwords on a server.
+---
 
-## Included
-- Dashboard with summary metrics, upcoming appointments, calendar, activity list, and quick actions
-- Patient record create, edit, view, search and filter
-- Appointment scheduling, editing, date/status filtering, and status updates
-- Treatment progress notes and progress history
-- Universal search across patients, appointments, and progress records
-- Editable staff profile
-- Responsive desktop/tablet/mobile layout
-- Required-field, email, phone-pattern, and length validation
-- Admin/staff demo role restrictions for patient record creation/editing
+## 📌 Project Features & Highlights
+- **100% Pure HTML, CSS & JavaScript**: No frameworks, build steps, or external dependencies required.
+- **True Multi-Page Architecture**: Individual HTML pages with standard hyperlinks and browser navigation support.
+- **Persistent State Across Pages**: Uses browser `localStorage` to synchronize patient records, appointments, and progress notes seamlessly across all pages.
+- **Role-Based Demo Access**: Supports **Administrator** and **Staff** roles with permission checks.
+- **Interactive Odontogram / Clinical Progress Tracking**: Timeline and status indicators for dental procedures.
+- **Responsive Design**: Optimized for desktops, tablets, and mobile devices.
 
-## Important production note
-This is a browser-only demonstration. It stores changes in page memory and uses a simulated sign-in; it is **not** production-ready and should not be used for real patient information. For real deployment, add a secure backend and database, server-side authentication, role/permission checks on every API, encrypted storage and transport, audit logs, backups, session protection, and compliance with applicable health-data and privacy requirements.
+---
+
+## 🗂️ File Structure
+
+| File | Description |
+| :--- | :--- |
+| `index.html` | Sign In / Login page (default entry point) |
+| `login.html` | Alternative direct link to login page |
+| `dashboard.html` | Main practice dashboard with statistics, upcoming appointments, calendar & quick actions |
+| `appointments.html` | Appointments management with filters, inline status transitions & scheduling modal |
+| `patients.html` | Electronic patient records directory with search and add/edit modals |
+| `progress.html` | Clinical treatment progress tracking and history timeline |
+| `search.html` | Universal cross-system search across patients, visits, and clinical notes |
+| `profile.html` | Practitioner profile settings and department information |
+| `settings.html` | Role permissions overview and demo data reset tool |
+| `style.css` | Modular stylesheet with CSS variables, responsive breakpoints, and animations |
+| `script.js` | Shared data layer (`localStorage`), modal dialog controller, and toast notification engine |
+
+---
+
+## 🔐 Demo Credentials
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Administrator** | `admin@smilecare.demo` | `SmileCare123!` |
+| **Staff Member** | `staff@smilecare.demo` | `SmileCare123!` |
+
+---
+
+## 🚀 How to Run
+
+1. **Direct in Browser**: Double-click `index.html` to open directly in Chrome, Edge, Firefox, or Safari.
+2. **VS Code Live Server**: Right-click `index.html` and select **"Open with Live Server"**.
